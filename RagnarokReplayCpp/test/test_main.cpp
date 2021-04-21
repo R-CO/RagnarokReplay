@@ -11,8 +11,9 @@ using std::endl;
 int main(int argc, char *argvp[]) {
   TEST_START();
 
-  Replay_getKey1();
-  Replay_getKey2();
+  ADD_TEST_FUNCTION(Replay_getKey1);
+  ADD_TEST_FUNCTION(Replay_getKey2);
+  ADD_TEST_FUNCTION(Replay_decrypt);
 
   PRINT_STATICS();
 

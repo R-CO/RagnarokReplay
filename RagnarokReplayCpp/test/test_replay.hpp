@@ -1,9 +1,9 @@
 #ifndef RAGNAROKREPLAY_RAGNAROKREPLAYCPP_TEST_TESTREPLAY_HPP
 #define RAGNAROKREPLAY_RAGNAROKREPLAYCPP_TEST_TESTREPLAY_HPP
 
+#include <algorithm>
 #include <cstdint>
-#include <iostream> // TODO: remove this
-
+#include <iostream>  // TODO: remove this
 #include <vector>
 
 #include "../Replay.hpp"
@@ -46,8 +46,8 @@ void Replay_getKey2() {
 }
 
 void Replay_decrypt() {
-	RagnarokReplay::Replay::DateTime date_time;
-	date_time.year = 2021;
+  RagnarokReplay::Replay::DateTime date_time;
+  date_time.year = 2021;
   date_time.month = 4;
   date_time.day = 19;
   date_time.hour = 14;
@@ -55,12 +55,14 @@ void Replay_decrypt() {
   date_time.second = 30;
   PublicReplay replay;
 
-	std::vector<uint8_t> packet_data = {1, 2, 3, 4, 5};
-	replay.Decrypt(replay.GetKey1(date_time), replay.GetKey2(date_time), packet_data);
+  std::vector<uint8_t> packet_data = {1, 2, 3, 4, 5};
+  replay.Decrypt(replay.GetKey1(date_time), replay.GetKey2(date_time),
+                 packet_data);
+  std::vector<uint8_t> expected_data = {1, 114, 139, 167, 5};
 
-	for (const auto byte : packet_data) {
-
-	}
+  EXPECT_EQ(
+      std::equal(packet_data.begin(), packet_data.end(), expected_data.begin()),
+      true);
 }
 
 #endif  // end of define RAGNAROKREPLAY_RAGNAROKREPLAYCPP_TEST_TESTREPLAY_HPP

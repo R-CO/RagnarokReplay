@@ -2,7 +2,7 @@
 
 alias CXX=clang++
 
-CXX_FLAG="-std=c++11 -O2"
+CXX_FLAG="-std=c++11 -O2 -g"
 
 INCLUDE_DIR=""
 LINK_DIR=""

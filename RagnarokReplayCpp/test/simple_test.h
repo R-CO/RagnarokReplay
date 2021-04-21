@@ -14,6 +14,11 @@ extern "C" {
 extern int test_pass_count;
 extern int test_fail_count;
 
+#define ADD_TEST_FUNCTION(func)      \
+  printf("=== %s() START\n", #func); \
+  func();                            \
+  printf("%s() END ===\n", #func);
+
 #define EXPECT_EQ(a, b)                                                        \
   if ((a) == (b)) {                                                            \
     ++test_pass_count;                                                         \

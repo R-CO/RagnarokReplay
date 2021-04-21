@@ -22,11 +22,11 @@ int32_t Replay::GetKey2(const Replay::DateTime &date_time) {
 void Replay::Decrypt(const int32_t kKey1, const int32_t kKey2,
                      std::vector<uint8_t> &packet_data) {
   const size_t kSegmentCount = packet_data.size() >> 2;
-	int32_t *i32_ptr = reinterpret_cast<int32_t *>(packet_data.data());
-	for (size_t i = 0; i < kSegmentCount; ++i) {
-		*i32_ptr = *i32_ptr ^ (kKey1 + (i + 1)) * kKey2;
-		++i32_ptr;
-	}
+  int32_t *i32_ptr = reinterpret_cast<int32_t *>(packet_data.data());
+  for (size_t i = 0; i < kSegmentCount; ++i) {
+    *i32_ptr = *i32_ptr ^ (kKey1 + (i + 1)) * kKey2;
+    ++i32_ptr;
+  }
 }
 
 }  // end of namespace RagnarokReplay

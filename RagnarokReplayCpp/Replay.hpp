@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <exception>
+#include <istream>
 #include <string>
 #include <vector>
 
@@ -25,7 +26,7 @@ class Replay {
   };
 
   struct Header {
-    uint8_t misc[100];
+    uint8_t discription[100];
     uint8_t version;
     uint8_t signature[3];
     DateTime date;
@@ -40,6 +41,8 @@ class Replay {
 
   void Decrypt(const int32_t kKey1, const int32_t kKey2,
                std::vector<uint8_t> &packet_data);
+
+  void ParseHeader(std::istream &input_stream);
 };  // end of class Replay
 
 }  // end of namespace RagnarokReplay
