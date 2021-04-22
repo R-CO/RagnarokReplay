@@ -1,6 +1,7 @@
 #include "Replay.hpp"
 
 #include <cstdint>
+#include <istream>
 #include <string>
 
 namespace RagnarokReplay {
@@ -27,6 +28,10 @@ void Replay::Decrypt(const int32_t kKey1, const int32_t kKey2,
     *i32_ptr = *i32_ptr ^ (kKey1 + (i + 1)) * kKey2;
     ++i32_ptr;
   }
+}
+
+void Replay::ParseHeader(std::istream &input_stream) {
+  input_stream.read(reinterpret_cast<char *>(&header), sizeof(header));
 }
 
 }  // end of namespace RagnarokReplay

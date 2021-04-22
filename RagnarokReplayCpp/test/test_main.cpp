@@ -14,6 +14,7 @@ int main(int argc, char *argvp[]) {
   ADD_TEST_FUNCTION(Replay_getKey1);
   ADD_TEST_FUNCTION(Replay_getKey2);
   ADD_TEST_FUNCTION(Replay_decrypt);
+  ADD_TEST_FUNCTION(Replay_parseHeader);
 
   PRINT_STATICS();
 
