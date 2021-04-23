@@ -5,7 +5,6 @@
 #include <cstdint>
 #include <iostream>
 #include <sstream>
-
 #include <vector>
 
 #include "../Replay.hpp"
@@ -13,63 +12,10 @@
 
 class PublicReplay : public RagnarokReplay::Replay {
  public:
-  int32_t GetKey1(const RagnarokReplay::Replay::DateTime &date_time) {
-    return RagnarokReplay::Replay::GetKey1(date_time);
-  }
-
-  int32_t GetKey2(const RagnarokReplay::Replay::DateTime &date_time) {
-    return RagnarokReplay::Replay::GetKey2(date_time);
-  }
-
-  void Decrypt(const int32_t kKey1, const int32_t kKey2,
-               std::vector<uint8_t> &packet_data) {
-    RagnarokReplay::Replay::Decrypt(kKey1, kKey2, packet_data);
-  }
-
   void ParseHeader(std::istream &input_stream) {
     RagnarokReplay::Replay::ParseHeader(input_stream);
   }
 };  // end of class PublicReplay
-
-void Replay_getKey1() {
-  RagnarokReplay::Replay::DateTime date_time;
-  date_time.year = 2021;
-  date_time.month = 4;
-  date_time.day = 19;
-  PublicReplay replay;
-
-  EXPECT_EQ(replay.GetKey1(date_time), 0x130407E5 >> 5);
-}
-
-void Replay_getKey2() {
-  RagnarokReplay::Replay::DateTime date_time;
-  date_time.hour = 14;
-  date_time.minute = 42;
-  date_time.second = 30;
-  PublicReplay replay;
-
-  EXPECT_EQ(replay.GetKey2(date_time), 0x1E2A0E00 >> 3);
-}
-
-void Replay_decrypt() {
-  RagnarokReplay::Replay::DateTime date_time;
-  date_time.year = 2021;
-  date_time.month = 4;
-  date_time.day = 19;
-  date_time.hour = 14;
-  date_time.minute = 42;
-  date_time.second = 30;
-  PublicReplay replay;
-
-  std::vector<uint8_t> packet_data = {1, 2, 3, 4, 5};
-  replay.Decrypt(replay.GetKey1(date_time), replay.GetKey2(date_time),
-                 packet_data);
-  std::vector<uint8_t> expected_data = {1, 114, 139, 167, 5};
-
-  EXPECT_EQ(
-      std::equal(packet_data.begin(), packet_data.end(), expected_data.begin()),
-      true);
-}
 
 void Replay_parseHeader() {
   unsigned char header_raw_data[112] = {
@@ -84,12 +30,15 @@ void Replay_parseHeader() {
       0x0A, 0x00, 0x00, 0x00, 0x05, 0x47, 0x41, 0x52, 0xE2, 0x07, 0x03, 0x0B,
       0x00, 0x14, 0x3B, 0x12};
   std::stringstream ss;
-  ss.write(reinterpret_cast<const char *>(header_raw_data), sizeof(header_raw_data));
+  ss.write(reinterpret_cast<const char *>(header_raw_data),
+           sizeof(header_raw_data));
 
   PublicReplay replay;
   replay.ParseHeader(ss);
 
-  EXPECT_EQ(replay.header.version, 5);
+  RagnarokReplay::Replay::Header *const header =
+      reinterpret_cast<RagnarokReplay::Replay::Header *const>(header_raw_data);
+  EXPECT_EQ(memcmp(&replay.header, header, sizeof(*header)), 0);
 }
 
 #endif  // end of define RAGNAROKREPLAY_RAGNAROKREPLAYCPP_TEST_TESTREPLAY_HPP

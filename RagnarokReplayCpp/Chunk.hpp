@@ -11,6 +11,8 @@ namespace RagnarokReplay {
 
 class Chunk {
  public:
+  Chunk() : Header(0), Id(0), Length(0), Time(0), Data() {}
+
   uint16_t Header;
   int32_t Id;
   int32_t Length;

@@ -3,15 +3,19 @@
 
 // C++ standard headers
 #include <cstdint>
+#include <istream>
+#include <memory>
+#include <string>
 
 // C++ STL
-#include <list>
+#include <vector>
 
 #include "Chunk.hpp"
+#include "DateTime.hpp"
 
 namespace RagnarokReplay {
 
-enum class ContainerType : int8_t {
+enum class ContainerType : uint16_t {
   None = 0,
   PacketStream = 1,
   ReplayData = 2,
@@ -40,11 +44,62 @@ enum class ContainerType : int8_t {
 
 class ChunkContainer {
  public:
-  ContainerType ContainerType;
-  int32_t Length;
-  int32_t Offset;
-  std::list<Chunk> Data;
+  ChunkContainer() : container_type(ContainerType::None), length(0), offset(0), data() {}
+
+  ContainerType container_type;
+  int32_t length;
+  int32_t offset;
+  std::vector<Chunk> data;
 };  // end of class ChunkContainer
+
+class LoadChunkContainerInterface {
+ public:
+  virtual void LoadChunkContainer(std::istream &input_stream,
+                                  const size_t kMaxReadSize,
+                                  ChunkContainer &chunk_container) = 0;
+};
+
+class LoadChunkContainerV5 : public LoadChunkContainerInterface {
+ public:
+  explicit LoadChunkContainerV5(const DateTime &date_time);
+
+  virtual void LoadChunkContainer(std::istream &input_stream,
+                                  const size_t kMaxReadSize,
+                                  ChunkContainer &chunk_container) = 0;
+
+ protected:
+  int32_t GetKey1(const DateTime &date_time) const;
+  int32_t GetKey2(const DateTime &date_time) const;
+
+  void Decrypt(const int32_t kKey1, const int32_t kKey2,
+               std::string &packet_data);
+  void Decrypt(const int32_t kKey1, const int32_t kKey2,
+               std::vector<uint8_t> &packet_data);
+  void Decrypt(const int32_t kKey1, const int32_t kKey2, uint8_t *packet_data,
+               const size_t packet_size);
+
+  const DateTime kDateTime_;
+  const int32_t kKey1_;
+  const int32_t kKey2_;
+};
+
+class LoadChunkContainerPacketStreamV5 : public LoadChunkContainerV5 {
+ public:
+  explicit LoadChunkContainerPacketStreamV5(const DateTime &date_time);
+
+  virtual void LoadChunkContainer(std::istream &input_stream,
+                                  const size_t kMaxReadSize,
+                                  ChunkContainer &chunk_container) override;
+};
+
+class LoadChunkContainerNonPacketStreamV5 : public LoadChunkContainerV5 {
+ public:
+  explicit LoadChunkContainerNonPacketStreamV5(const DateTime &date_time);
+
+  virtual void LoadChunkContainer(std::istream &input_stream,
+                                  const size_t kMaxReadSize,
+                                  ChunkContainer &chunk_container) override;
+};
 
 }  // end of namespace RagnarokReplay
 

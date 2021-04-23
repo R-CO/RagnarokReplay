@@ -6,7 +6,9 @@ using std::endl;
 #include "Replay.hpp"
 
 int main(int argc, char *argv[]) {
-  cout << "Test~" << endl;
+  RagnarokReplay::Replay replay;
+
+  replay.LoadFile("../RagnarokReplayExample/Replay/woe1103-1.rrf");
 
   return EXIT_SUCCESS;
 }
