@@ -1,8 +1,15 @@
 #!/bin/sh
 
+set -x
+
 alias CXX=clang++
 
-CXX_FLAG="-std=c++17 -O2 -Wall -g"
+if [ "$1" == "debug" ];
+then
+	CXX_FLAG="-std=c++17 -O0 -Wall -g"
+else
+	CXX_FLAG="-std=c++17 -O2 -Wall"
+fi
 
 INCLUDE_DIR=""
 LINK_DIR=""
