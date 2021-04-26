@@ -1,5 +1,10 @@
 #!/bin/sh
 
+#/**
+# * Author: R-CO
+# * E-mail: daniel1820kobe@gmail.com
+# **/
+
 set -x
 
 alias CXX=clang++
