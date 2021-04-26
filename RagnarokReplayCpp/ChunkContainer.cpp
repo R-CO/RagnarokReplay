@@ -9,6 +9,9 @@
 
 namespace RagnarokReplay {
 
+ChunkContainer::ChunkContainer()
+    : container_type(ContainerType::None), length(0), offset(0), data() {}
+
 LoadChunkContainerV5::LoadChunkContainerV5(const DateTime &date_time)
     : kDateTime_(date_time),
       kKey1_(GetKey1(date_time)),
@@ -63,15 +66,15 @@ void LoadChunkContainerPacketStreamV5::LoadChunkContainer(
 
   while (in_stream.peek() != EOF) {
     Chunk packet;
-    in_stream.read(reinterpret_cast<char *>(&packet.Id), sizeof(int32_t));
-    in_stream.read(reinterpret_cast<char *>(&packet.Time), sizeof(int32_t));
-    in_stream.read(reinterpret_cast<char *>(&packet.Length), sizeof(uint16_t));
-    if (packet.Length > 0) {
-      packet.Data.resize(packet.Length);
-      in_stream.read(reinterpret_cast<char *>(packet.Data.data()),
-                     packet.Length);
-      Decrypt(kKey1_, kKey2_, packet.Data);
-      packet.Header = *(reinterpret_cast<uint16_t *>(packet.Data.data()));
+    in_stream.read(reinterpret_cast<char *>(&packet.id), sizeof(int32_t));
+    in_stream.read(reinterpret_cast<char *>(&packet.time), sizeof(int32_t));
+    in_stream.read(reinterpret_cast<char *>(&packet.length), sizeof(uint16_t));
+    if (packet.length > 0) {
+      packet.data.resize(packet.length);
+      in_stream.read(reinterpret_cast<char *>(packet.data.data()),
+                     packet.length);
+      Decrypt(kKey1_, kKey2_, packet.data);
+      packet.header = *(reinterpret_cast<uint16_t *>(packet.data.data()));
     }
     chunk_container.data.emplace_back(packet);
   }
@@ -93,10 +96,10 @@ void LoadChunkContainerNonPacketStreamV5::LoadChunkContainer(
 
   while (in_stream.peek() != EOF) {
     Chunk entry;
-    in_stream.read(reinterpret_cast<char *>(&entry.Id), sizeof(int16_t));
-    in_stream.read(reinterpret_cast<char *>(&entry.Length), sizeof(int32_t));
-    entry.Data.resize(entry.Length);
-    in_stream.read(reinterpret_cast<char *>(entry.Data.data()), entry.Length);
+    in_stream.read(reinterpret_cast<char *>(&entry.id), sizeof(int16_t));
+    in_stream.read(reinterpret_cast<char *>(&entry.length), sizeof(int32_t));
+    entry.data.resize(entry.length);
+    in_stream.read(reinterpret_cast<char *>(entry.data.data()), entry.length);
     chunk_container.data.emplace_back(entry);
   }
 }

@@ -44,7 +44,7 @@ enum class ContainerType : uint16_t {
 
 class ChunkContainer {
  public:
-  ChunkContainer() : container_type(ContainerType::None), length(0), offset(0), data() {}
+  ChunkContainer();
 
   ContainerType container_type;
   int32_t length;

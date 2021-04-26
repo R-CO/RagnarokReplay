@@ -11,13 +11,13 @@ namespace RagnarokReplay {
 
 class Chunk {
  public:
-  Chunk() : Header(0), Id(0), Length(0), Time(0), Data() {}
+  Chunk() : header(0), id(0), length(0), time(0), data() {}
 
-  uint16_t Header;
-  int32_t Id;
-  int32_t Length;
-  int32_t Time;
-  std::vector<uint8_t> Data;
+  uint16_t header;
+  int32_t id;
+  int32_t length;
+  int32_t time;
+  std::vector<uint8_t> data;
 };
 
 }  // end of namespace RagnarokReplay
