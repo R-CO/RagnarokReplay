@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace RagnarokReplay {
-enum class ReplayOpCodes : int8_t {
+enum class ReplayOpCodes : int16_t {
   ZC_ROOM_NEWENTRY = 201,
   ZC_STORE_ENTRY = 202,
   ZC_BUYING_STORE_ENTRY = 204,

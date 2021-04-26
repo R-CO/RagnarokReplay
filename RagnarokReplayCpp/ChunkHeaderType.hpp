@@ -5,7 +5,7 @@
 
 namespace RagnarokReplay {
 
-enum class ChunkHeaderType : uint8_t {
+enum class ChunkHeaderType : uint16_t {
   HEADER_CA_LOGIN = 0x0064,
   HEADER_CH_ENTER = 0x0065,
   HEADER_CH_SELECT_CHAR = 0x0066,
