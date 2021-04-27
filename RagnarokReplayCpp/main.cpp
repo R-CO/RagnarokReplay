@@ -6,13 +6,19 @@
 #include <iostream>
 using std::cout;
 using std::endl;
+#include <string>
 
 #include "Replay.hpp"
 
 int main(int argc, char *argv[]) {
-  RagnarokReplay::Replay replay;
+  std::string file_path = "../RagnarokReplayExample/Replay/woe1103-1.rrf";
 
-  replay.LoadFile("../RagnarokReplayExample/Replay/woe1103-1.rrf");
+  if (argc >= 2) {
+    file_path = argv[1];
+  }
+
+  RagnarokReplay::Replay replay;
+  replay.LoadFile(file_path);
 
   return EXIT_SUCCESS;
 }
