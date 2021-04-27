@@ -35,7 +35,9 @@ int32_t LoadChunkContainerV5::GetKey2(const DateTime &date_time) const {
 
 void LoadChunkContainerV5::Decrypt(const int32_t kKey1, const int32_t kKey2,
                                    std::string &packet_data) {
-  Decrypt(kKey1, kKey2, reinterpret_cast<uint8_t *>(packet_data.data()),
+  Decrypt(kKey1, kKey2,
+          const_cast<uint8_t *>(
+              reinterpret_cast<const uint8_t *>(packet_data.data())),
           packet_data.size());
 }
 
@@ -64,7 +66,7 @@ void LoadChunkContainerPacketStreamV5::LoadChunkContainer(
     ChunkContainer &chunk_container) {
   std::string input;
   input.resize(kMaxReadSize);
-  input_stream.read(input.data(), kMaxReadSize);
+  input_stream.read(const_cast<char *>(input.data()), kMaxReadSize);
   std::stringstream in_stream(input,
                               std::ios::in | std::ios::out | std::ios::binary);
 
@@ -93,7 +95,7 @@ void LoadChunkContainerNonPacketStreamV5::LoadChunkContainer(
     ChunkContainer &chunk_container) {
   std::string input;
   input.resize(kMaxReadSize);
-  input_stream.read(input.data(), kMaxReadSize);
+  input_stream.read(const_cast<char *>(input.data()), kMaxReadSize);
   Decrypt(kKey1_, kKey2_, input);
   std::stringstream in_stream(input,
                               std::ios::in | std::ios::out | std::ios::binary);
