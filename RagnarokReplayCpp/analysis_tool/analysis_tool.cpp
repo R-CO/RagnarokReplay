@@ -17,8 +17,13 @@ using namespace std;
 #include "Replay.hpp"
 using namespace RagnarokReplay;
 
-std::array<std::string, static_cast<size_t>(ContainerType::LastContainerType)>
-    g_container_type_str = {u8"None",           u8"PacketStream",
+//
+// read-only data
+//
+const auto &getContainerTypeStr() {
+  static const std::array<const std::string,
+                          static_cast<size_t>(ContainerType::LastContainerType)>
+      container_type_str = {u8"None",           u8"PacketStream",
                             u8"ReplayData",     u8"Session",
                             u8"Status",         u8"Undefined_1",
                             u8"Quests",         u8"GroupAndFriends",
@@ -32,7 +37,17 @@ std::array<std::string, static_cast<size_t>(ContainerType::LastContainerType)>
                             u8"Unknown_22",     u8"Unknown_23",
                             u8"Unknown_24"};
 
-const string g_root_dir_path = u8"output";
+  return container_type_str;
+}
+
+//
+// read-only data
+//
+const auto &getRootDirPath() {
+  static const string root_dir_path = u8"output";
+
+  return root_dir_path;
+}
 
 bool isDirExist(const string &dir_path);
 
@@ -54,8 +69,8 @@ int main(int argc, char *argv[]) {
   replay.LoadFile(file_path);
 
   for (const auto &chunk_container : replay.chunk_container_array) {
-    const auto dir_path = g_root_dir_path + u8'/' +
-                          g_container_type_str[static_cast<size_t>(
+    const auto dir_path = getRootDirPath() + u8'/' +
+                          getContainerTypeStr()[static_cast<size_t>(
                               chunk_container.container_type)] +
                           u8'/';
     for (const auto &chunk : chunk_container.data) {
@@ -80,13 +95,13 @@ bool isDirExist(const string &dir_path) {
 }
 
 bool createOuputDirectories() {
-  _mkdir(g_root_dir_path.c_str());
-  if (!isDirExist(g_root_dir_path)) {
+  _mkdir(getRootDirPath().c_str());
+  if (!isDirExist(getRootDirPath())) {
     return false;
   }
 
-  for (auto &sub_dir_name : g_container_type_str) {
-    const auto dir_path = g_root_dir_path + u8'/' + sub_dir_name;
+  for (auto &sub_dir_name : getContainerTypeStr()) {
+    const auto dir_path = getRootDirPath() + u8'/' + sub_dir_name;
     _mkdir(dir_path.c_str());
     if (!isDirExist(dir_path)) {
       return false;
