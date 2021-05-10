@@ -73,6 +73,8 @@ class LoadChunkContainerV5 : public LoadChunkContainerInterface {
                                   const size_t kMaxReadSize,
                                   ChunkContainer &chunk_container) = 0;
 
+  LoadChunkContainerV5 &operator=(const LoadChunkContainerV5 &) = delete;
+
  protected:
   int32_t GetKey1(const DateTime &date_time) const;
   int32_t GetKey2(const DateTime &date_time) const;
