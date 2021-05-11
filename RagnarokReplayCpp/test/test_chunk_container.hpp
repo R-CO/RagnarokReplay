@@ -16,7 +16,7 @@
 
 class PublicChunkContainerV5 : public RagnarokReplay::LoadChunkContainerV5 {
  public:
-  PublicChunkContainerV5(const RagnarokReplay::DateTime &date_time)
+  explicit PublicChunkContainerV5(const RagnarokReplay::DateTime &date_time)
       : LoadChunkContainerV5(date_time) {}
 
   int32_t GetKey1(const RagnarokReplay::DateTime &date_time) {

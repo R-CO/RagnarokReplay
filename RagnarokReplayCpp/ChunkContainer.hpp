@@ -71,7 +71,7 @@ class LoadChunkContainerV5 : public LoadChunkContainerInterface {
 
   virtual void LoadChunkContainer(std::istream &input_stream,
                                   const size_t kMaxReadSize,
-                                  ChunkContainer &chunk_container) = 0;
+                                  ChunkContainer &chunk_container) override = 0;
 
   LoadChunkContainerV5 &operator=(const LoadChunkContainerV5 &) = delete;
 
